@@ -100,8 +100,6 @@ public class Film {
             MyTime n = MyTime.milliConvert(difference);
             System.out.println("Errore. L'anello eccede la durata totale del film di "+n.toString());
         }
-
-
     }
 
 
@@ -118,6 +116,17 @@ public class Film {
     // Retrieve list of chracters
     public ArrayList<Personaggio> getPersonaggi() {
         return personaggi;
+    }
+
+    // Retrieve list of anelli
+    public void getAnelli() {
+        String answer = "";
+        int i = 0;
+        for (Anello a:anelli) {
+            answer+=i+":\n"+a.toString();
+            i++;
+        }
+        System.out.println(answer);
     }
 
     // Add new character
@@ -152,6 +161,27 @@ public class Film {
     // Change the status
     public void changeStatus(Status newStatus) {
         this.status = newStatus;
+    }
+
+    // Check if a character exists in Film
+    public boolean checkPers (String pers) {
+        boolean answer = false;
+        for (Personaggio p : this.personaggi) {
+            if (p.getName().equals(pers)) {
+                answer = true;
+            }
+        }
+        return answer;
+    }
+
+    // Add a new couple to a subRing
+    public String addCoupleToSub (Personaggio pers, Doppiatore dopp, SubAnello sub) {
+        if (this.checkPers(pers.getName())==true) {
+            sub.addCoppia(pers, dopp);
+            return "OK";
+        } else {
+            return "NoooooO";
+        }
     }
 
     @Override

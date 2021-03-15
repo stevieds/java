@@ -29,6 +29,13 @@ public class Main {
 
         f.addAnello("1:30:0.0", "1:45:11.3");
 
+        boolean bool = f.checkPers("Lulu");
+        System.out.println(bool);
+
+        f.getAnelli();
+
+        f.addCoupleToSub("Coco", "Sonia Mazza");
+
         /*
 
         System.out.println("0:00:0.0", "0:45:11.3");

@@ -1,16 +1,13 @@
-import java.time.LocalTime;
 import java.util.HashMap;
 
 public class SubAnello extends Anello {
-    private LocalTime timeFrameStart;
-    private LocalTime timeFrameEnd;
     private HashMap <Personaggio, Doppiatore> coppie;
     private Status status;
 
     public SubAnello(MyTime start, MyTime end) {
         super(start, end);
         this.coppie = new HashMap<Personaggio, Doppiatore>();
-        status=Status.New;
+        this.status=Status.New;
     }
 
     public SubAnello(String stringStart, String stringEnd) {
@@ -18,6 +15,19 @@ public class SubAnello extends Anello {
         this.coppie = new HashMap<Personaggio, Doppiatore>();
         status=Status.New;
     }
+
+
+    public void addCoppia (Personaggio pers, Doppiatore dopp) {
+        this.coppie.put(pers, dopp);
+    }
+
+
+
+
+
+
+
+
 
 
 }
