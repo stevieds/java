@@ -6,7 +6,7 @@ public class Main {
         l = l.add("A",1);
         l = l.add("E",1);
         l = l.add("N",1);
-        l = l.add(l.getValue(),1);
+
         System.out.println(l);
 
         System.out.println(l.countEndsWith("N"));
@@ -14,12 +14,7 @@ public class Main {
         System.out.println(l.length());
 
         List reverse = new Nil();
-      
 
-        for (int i=0; i<l.length(); i++) {
-            reverse=reverse.add(l.nAtIndex(i), 0);
-            
-        }
 
         System.out.println("Rev    "+reverse);
 

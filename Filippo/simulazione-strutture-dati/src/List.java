@@ -11,12 +11,6 @@ public abstract class List {
 
     public abstract List getNext();
 
-
-
-    public abstract String getValue();
-
     public abstract int length();
 
-
-    public abstract String nAtIndex(int indice);
 }

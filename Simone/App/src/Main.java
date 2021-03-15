@@ -15,8 +15,9 @@ public class Main {
 
 
         Film f = new Film("Ciao", e);
-        f.setPersonaggi("Mimi");
-        f.setPersonaggi("Coco");
+        Personaggio b = new Personaggio ("Celeste");
+        f.setPersonaggio("Mimi");
+        f.setPersonaggio("Celeste");
 
         Anello w = new Anello ("0:00:0.0", "0:45:11.3" );
         Anello y = new Anello ("0:50:0.0", "1:00:11.3" );
@@ -28,13 +29,15 @@ public class Main {
         f.addAnello(y);
 
         f.addAnello("1:30:0.0", "1:45:11.3");
+        Doppiatore a = new Doppiatore("Sonia Mazza", Genere.F);
 
-        boolean bool = f.checkPers("Lulu");
-        System.out.println(bool);
 
-        f.getAnelli();
+        f.setDoppiatore(a, b);
 
-        f.addCoupleToSub("Coco", "Sonia Mazza");
+
+        System.out.println(f.getCoppie());
+
+
 
         /*
 

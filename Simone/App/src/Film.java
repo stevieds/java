@@ -6,14 +6,14 @@ public class Film {
     private String oTitle;
     private MyTime length;
     private ArrayList<Anello> anelli;
-    private ArrayList<Personaggio> personaggi;
+    private ArrayList<Coppia> persDopp;
     private Status status;
 
     //Costruttore
     public Film(String oTitle, MyTime length) {
         this.oTitle = oTitle;
         this.length = length;
-        this.personaggi = new ArrayList<Personaggio>();
+        this.persDopp = new ArrayList<Coppia>();
         this.anelli = new ArrayList<Anello>();
         this.status = Status.New;
     }
@@ -113,9 +113,14 @@ public class Film {
         return durata;
     }
 
-    // Retrieve list of chracters
-    public ArrayList<Personaggio> getPersonaggi() {
-        return personaggi;
+    // Retrieve list of abbinamenti
+    public String getCoppie() {
+        String answer="";
+        for (Coppia coppia : persDopp) {
+            answer+="Personaggio: "+coppia.getPers()+", voce: "+coppia.getDopp()+"\n";
+        }
+
+        return answer;
     }
 
     // Retrieve list of anelli
@@ -130,20 +135,38 @@ public class Film {
     }
 
     // Add new character
-    public void setPersonaggi(String nomePers) {
-        personaggi.add(new Personaggio (nomePers));
+    public void setPersonaggio(String nomePers) {
+        Personaggio pers = new Personaggio(nomePers);
+        persDopp.add(new Coppia (pers));
     }
 
-    // Replace an existing character with a new one
-    public void replacePersonaggio (String vecchio, String nuovo) {
-        int index = 0;
-        for (Personaggio pers : this.personaggi) {
-            if (pers.getName() == vecchio) {
-                index = this.personaggi.indexOf(pers);
+    // Add doppiatore to personaggio
+    public void setDoppiatore (Doppiatore dopp, Personaggio pers) {
+        for (Coppia coppia : this.persDopp) {
+            if (pers.getName().equals(coppia.getName(pers))) {
+                coppia.setDopp(dopp);
+            }
+       }
+    }
+
+    // Replace a doppiatore with a new one
+    public void replaceInCoppia (Doppiatore dopp) {
+        for (Coppia coppia : this.persDopp) {
+            if (dopp.getName().equals(coppia.getName(dopp))) {
+                coppia.setDopp(dopp);
             }
         }
-        this.personaggi.set(index, new Personaggio(nuovo));
     }
+
+    // Amend character
+    public void replaceInCoppia (Personaggio pers) {
+        for (Coppia coppia : this.persDopp) {
+            if (pers.getName().equals(coppia.getName(pers))) {
+                coppia.setPers(pers);
+            }
+        }
+    }
+
 
     // Check the status
     public String checkCompleted() {
@@ -163,10 +186,11 @@ public class Film {
         this.status = newStatus;
     }
 
+    /*
     // Check if a character exists in Film
     public boolean checkPers (String pers) {
         boolean answer = false;
-        for (Personaggio p : this.personaggi) {
+        for (Coppia p : this.personaggi) {
             if (p.getName().equals(pers)) {
                 answer = true;
             }
@@ -175,7 +199,7 @@ public class Film {
     }
 
     // Add a new couple to a subRing
-    public String addCoupleToSub (Personaggio pers, Doppiatore dopp, SubAnello sub) {
+    public String addCoupleToSub (Coppia pers, Doppiatore dopp, SubAnello sub) {
         if (this.checkPers(pers.getName())==true) {
             sub.addCoppia(pers, dopp);
             return "OK";
@@ -184,6 +208,8 @@ public class Film {
         }
     }
 
+     */
+
     @Override
     public String toString() {
         return
@@ -191,9 +217,8 @@ public class Film {
                 "Titolo originale: '" + oTitle + '\n' +
                 "Durata: " + length + '\n' +
                 "Anelli: " + anelli + '\n' +
-                "Personaggi: " + personaggi + '\n' +
+                "Abbinamenti: " + persDopp + '\n' +
                 "Stato: " + this.checkCompleted();
-
     }
 }
 

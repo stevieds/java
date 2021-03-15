@@ -51,9 +51,6 @@ public class Node extends List{
         return next;
     }
 
-    public String getValue() {
-        return value;
-    }
 
     @Override
     public int length() {
@@ -61,14 +58,6 @@ public class Node extends List{
     }
 
 
-    @Override
-    public String nAtIndex(int indice) {
-        if (indice == 0) {
-            return this.value;
-        } else {
-            String ret=this.next.nAtIndex(indice - 1);
-            return ret;
-        }
-    }
+
 
 }
