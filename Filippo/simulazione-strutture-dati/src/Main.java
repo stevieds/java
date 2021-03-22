@@ -1,7 +1,13 @@
+
 public class Main {
 
     public static void main(String[] args) {
 
+
+
+
+
+        /*
         List l = new Node("1N",new Node("2c",new Node("3N",new Nil())));
         l = l.add("A",1);
         l = l.add("E",1);
@@ -17,11 +23,6 @@ public class Main {
 
 
         System.out.println("Rev    "+reverse);
-
-        
-
-
-        /*
 
         l = l.add("New",1);
 

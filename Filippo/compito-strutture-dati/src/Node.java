@@ -58,6 +58,13 @@ public class Node extends List {
         boolean answer;
         answer = this.value == newL.getValue();
         return answer && this.next.equals(newL.next);
+
+        /* Alternativa
+        if (obj instanceof Nil) {
+        return false;
+        }
+
+         */
     }
 
     @Override
