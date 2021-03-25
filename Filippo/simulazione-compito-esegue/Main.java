@@ -22,8 +22,8 @@ public class Main {
 
         // Z obj5 = new Y(3); NO, Z estende X e non Y
         Z obj6 = new Z (3); // OK
-        System.out.println(obj6.metodo1()); // NO, ne X ne Z hanno metodo1
-        Z obj7 = new Interf(7);
+        // System.out.println(obj6.metodo1()); NO, ne X ne Z hanno metodo1
+        //Z obj7 = new Interf(7);
 
 
 
