@@ -34,8 +34,9 @@ public class Nil extends List {
     }
 
    @Override
-    public boolean equals() {
-        return true;
+    public boolean equals(Object obj) {
+       // return true; Mia soluzione
+       return obj instanceof Nil;
     }
 
     @Override

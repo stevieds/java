@@ -28,5 +28,7 @@ public class Main {
         System.out.println(l.equals(l2)); // questo deve stampare true
         System.out.println(l.equals(l.doubleValue())); // questo deve stampare false
 
+        System.out.println("*******************");
+        }
+
     }
-}
