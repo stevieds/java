@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Film {
+public class Film implements Methods{
 
     private String iTitle;
     private String oTitle;
@@ -55,14 +55,14 @@ public class Film {
 
     // Add anello with Obj
     public void addAnello(Anello anello) {
-        if (this.lengthInMilli()>=(this.durataTotAnelli()+anello.lengthInMilli())) {
+        if (this.lengthInMilli()>=(this.durataTotAnelli(this.anelli)+anello.lengthInMilli())) {
             this.anelli.add(anello);
-            long difference = this.lengthInMilli() - this.durataTotAnelli();
+            long difference = this.lengthInMilli() - this.durataTotAnelli(this.anelli);
             MyTime n = MyTime.milliConvert(difference);
             System.out.println("L'anello è stato aggiunto correttamente. La durata rimanente è di: "+n.toString());
         }
         else {
-            long difference = (this.durataTotAnelli() + anello.lengthInMilli()) - this.lengthInMilli();
+            long difference = (this.durataTotAnelli(this.anelli) + anello.lengthInMilli()) - this.lengthInMilli();
             MyTime n = MyTime.milliConvert(difference);
             System.out.println("Errore. L'anello eccede la durata totale del film di "+n.toString());
         }
@@ -70,14 +70,14 @@ public class Film {
 
     // Add Anello with MyTime
     public void addAnello(MyTime start, MyTime end) {
-        if (this.lengthInMilli()>=(this.durataTotAnelli()+ (end.milliSec() - start.milliSec()))) {
+        if (this.lengthInMilli()>=(this.durataTotAnelli(this.anelli)+ (end.milliSec() - start.milliSec()))) {
             this.anelli.add(new Anello (start, end));
-            long difference = this.lengthInMilli() - this.durataTotAnelli();
+            long difference = this.lengthInMilli() - this.durataTotAnelli(this.anelli);
             MyTime n = MyTime.milliConvert(difference);
             System.out.println("L'anello è stato aggiunto correttamente. La durata rimanente è di: "+n.toString());
         }
         else {
-            long difference = ((this.durataTotAnelli()+ (end.milliSec() - start.milliSec()) - this.lengthInMilli()));
+            long difference = ((this.durataTotAnelli(this.anelli)+ (end.milliSec() - start.milliSec()) - this.lengthInMilli()));
             MyTime n = MyTime.milliConvert(difference);
             System.out.println("Errore. L'anello eccede la durata totale del film di "+n.toString());
         }
@@ -89,14 +89,14 @@ public class Film {
         MyTime s = new MyTime(start);
         MyTime e = new MyTime(end);
 
-        if (this.lengthInMilli()>=(this.durataTotAnelli()+ (e.milliSec() - s.milliSec()))) {
+        if (this.lengthInMilli()>=(this.durataTotAnelli(this.anelli)+ (e.milliSec() - s.milliSec()))) {
             this.anelli.add(new Anello (start, end));
-            long difference = this.lengthInMilli() - this.durataTotAnelli();
+            long difference = this.lengthInMilli() - this.durataTotAnelli(this.anelli);
             MyTime n = MyTime.milliConvert(difference);
             System.out.println("L'anello è stato aggiunto correttamente. La durata rimanente è di: "+n.toString());
         }
         else {
-            long difference = ((this.durataTotAnelli()+ (e.milliSec() - s.milliSec()) - this.lengthInMilli()));
+            long difference = ((this.durataTotAnelli(this.anelli)+ (e.milliSec() - s.milliSec()) - this.lengthInMilli()));
             MyTime n = MyTime.milliConvert(difference);
             System.out.println("Errore. L'anello eccede la durata totale del film di "+n.toString());
         }
@@ -104,14 +104,6 @@ public class Film {
 
 
 
-    // Check the total length of all of the anelli
-    public long durataTotAnelli () {
-        long durata = 0;
-        for (Anello anello : anelli) {
-            durata+= anello.lengthInMilli();
-        }
-        return durata;
-    }
 
     // Retrieve list of abbinamenti
     public String getCoppie() {
