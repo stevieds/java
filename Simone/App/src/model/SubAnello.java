@@ -1,3 +1,5 @@
+package model;
+
 import java.util.HashMap;
 
 public class SubAnello extends Anello {
@@ -7,13 +9,13 @@ public class SubAnello extends Anello {
     public SubAnello(MyTime start, MyTime end) {
         super(start, end);
         this.coppie = new HashMap<Personaggio, Doppiatore>();
-        this.status=Status.New;
+        this.status=Status.NEW;
     }
 
     public SubAnello(String stringStart, String stringEnd) {
         super(stringStart, stringEnd);
         this.coppie = new HashMap<Personaggio, Doppiatore>();
-        status=Status.New;
+        status=Status.NEW;
     }
 
 

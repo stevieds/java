@@ -1,5 +1,7 @@
+package model;
+
 public enum Status {
-    New,
+    NEW,
     Wip,
     Done
 }

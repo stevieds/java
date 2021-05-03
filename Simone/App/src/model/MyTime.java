@@ -1,3 +1,5 @@
+package model;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -5,6 +7,8 @@ import java.util.Date;
 public class MyTime {
     private Date date;
     private static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
+
+
 
     // Constructor
     public MyTime (String dateString) {
@@ -35,6 +39,22 @@ public class MyTime {
         String dateStr = sdf.format(milli);
         MyTime n = new MyTime (dateStr);
         return n;
+    }
+
+    public int getHour() {
+        return Integer.parseInt(new SimpleDateFormat("HH").format(date));
+    }
+
+    public int getMin() {
+        return Integer.parseInt(new SimpleDateFormat("mm").format(date));
+    }
+
+    public int getSec() {
+        return Integer.parseInt(new SimpleDateFormat("ss").format(date));
+    }
+
+    public int getSss() {
+        return Integer.parseInt(new SimpleDateFormat("SSS").format(date));
     }
 
 

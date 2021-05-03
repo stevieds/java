@@ -1,3 +1,5 @@
+package model;
+
 import java.util.ArrayList;
 
 public class Anello {
@@ -5,22 +7,52 @@ public class Anello {
     private MyTime end;
     private ArrayList<SubAnello> subAnelli;
     private Status status;
+    private Coppia persDopp;
 
-    // Costruttore con MyTime
+
+
+    private String anelloId;
+
+
+
+    // Costruttore con model.MyTime
     public Anello(MyTime start, MyTime end) {
         this.start = start;
         this.end = end;
-        this.status = Status.New;
+        this.status = Status.NEW;
     }
 
     // Costruttore con String
     public Anello(String stringStart, String stringEnd) {
         this.start = new MyTime(stringStart);
         this.end = new MyTime(stringEnd);
-        this.status = Status.New;
+        this.status = Status.NEW;
     }
 
-    // Restituisce durata in MyTime
+    // Costruttore con String e Status
+    public Anello(String stringStart, String stringEnd, Status status) {
+        this.start = new MyTime(stringStart);
+        this.end = new MyTime(stringEnd);
+        this.status = status;
+    }
+
+    public MyTime getStart() {
+        return start;
+    }
+
+    public void setStart(MyTime start) {
+        this.start = start;
+    }
+
+    public MyTime getEnd() {
+        return end;
+    }
+
+    public void setEnd(MyTime end) {
+        this.end = end;
+    }
+
+    // Restituisce durata in model.MyTime
     public MyTime length () {
         long milli = this.end.milliSec() - this.start.milliSec();
         return MyTime.milliConvert(milli);
@@ -41,8 +73,25 @@ public class Anello {
         return durata;
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
-    // Add SubAnello with Strings
+    public String getAnelloId() {
+        return anelloId;
+    }
+
+    public void setAnelloId(String anelloId) {
+        this.anelloId = anelloId;
+    }
+
+    // Get Status
+    public String getStatus() {
+        return this.status.name();
+    }
+
+
+    // Add model.SubAnello with Strings
     public void addSubAnello(String start, String end) {
         MyTime s = new MyTime(start);
         MyTime e = new MyTime(end);
@@ -61,13 +110,18 @@ public class Anello {
     }
 
 
+    public Coppia getCouple () {
+        return persDopp;
+    }
 
-
+    public void addCouple (Coppia persDopp) {
+        this.persDopp = persDopp;
+    }
 
     @Override
     public String toString() {
         String compl="";
-        if (this.status==Status.Wip || this.status == Status.New) {
+        if (this.status==Status.Wip || this.status == Status.NEW) {
             compl = "No";
         } else if (this.status==Status.Done) {
             compl = "Si";
