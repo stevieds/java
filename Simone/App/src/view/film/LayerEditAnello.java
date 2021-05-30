@@ -1,34 +1,27 @@
 package view.film;
 
 import Controller.AnelloController;
-import Controller.CoupleController;
-import Controller.VoiceController;
-import db.DbCastCouple;
-import db.DbStaff;
 import model.*;
 import view.LayerPanel;
-import view.PopUpFail;
-import view.PopUpSuccess;
+import view.PopUpSimple;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
-public class LayerEditAnello extends LayerPanel implements ItemListener  {
+public class LayerEditAnello extends LayerPanel implements ItemListener {
     JLabel startL;
     JLabel endL;
     JLabel persL;
-    JLabel doppL;
+
 
     JPanel times;
 
-    JComboBox voicesList;
+
     JComboBox persList;
 
     JPanel peopleP;
@@ -47,58 +40,54 @@ public class LayerEditAnello extends LayerPanel implements ItemListener  {
 
     JButton delete;
 
-    Personaggio pers;
-    Doppiatore dopp;
+    Coppia copp;
 
     Anello anello;
     Film film;
 
+    MyTime newEnd;
+    MyTime newStart;
 
-    public LayerEditAnello(Film film, Anello anello) throws SQLException {
+
+    public LayerEditAnello(Film film, Anello anello)  throws SQLException {
         this.anello = anello;
         this.film = film;
-/*
 
-        namePListener = new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                if (!film.checkPersonaggio(namePText.getText())) {
-                    pers = new Personaggio(namePText.getText());
-                }
-            }
+        this.top.setLayout(new BorderLayout());
+        JLabel title = new JLabel("Modifica abbinamento");
+        title.setFont(peignotBig);
+        title.setForeground(darkGray);
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        top.add(title, BorderLayout.NORTH);
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-            }
+        JTextArea descr = new JTextArea();
+        descr.setText("Da qui è possibile cambiare il nome di un dato personaggio " +
+                "oppure il doppiatore ad esso associato");
+        descr.setFont(simple);
+        descr.setSize(300, 50);
+        descr.setEditable(false);
+        descr.setForeground(darkGray);
+        descr.setBackground(lightGray);
+        descr.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        descr.setLineWrap(true);
 
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-            }
-        };
+        top.add(descr, BorderLayout.CENTER);
 
-         */
         times = new JPanel();
         times.setLayout(new GridLayout(2, 2));
-        this.data.setLayout(new BorderLayout());
-
-        peopleP = new JPanel();
-        peopleP.setLayout(new GridLayout(2, 2));
+        this.data.setLayout(new FlowLayout());
+        JPanel main = new JPanel(new GridLayout(6, 1));
 
         persL = new JLabel("Personaggio");
-        doppL = new JLabel("Doppiatore");
-        voicesList = new JComboBox(VoiceController.allVoices().toArray());
-        //voicesList.setSelectedItem(anello.getCouple().getDopp());
-        voicesList.setName("Doppiatore");
-        voicesList.addItemListener(this);
-        persList = new JComboBox(CoupleController.getAllCharacters().toArray());
-        //persList.setSelectedItem(anello.getCouple().getPers());
-        persList.setName("Personaggio");
+
+        persList = new JComboBox(film.getCoppie().toArray());
+        persList.setSelectedItem(anello.getCouple());
+        persList.setName("Coppie");
+        persList.setUI(new BasicComboBoxUI());
+        persList.setBackground(Color.WHITE);
         persList.addItemListener(this);
-        peopleP.add(persL);
-        peopleP.add(persList);
-        peopleP.add(doppL);
-        peopleP.add(voicesList);
-        data.add(peopleP, BorderLayout.NORTH);
+        main.add(persL);
+        main.add(persList);
 
 
         jStartPanel = new JPanel();
@@ -117,8 +106,8 @@ public class LayerEditAnello extends LayerPanel implements ItemListener  {
         sssS.setValue(anello.getStart().getSss());
         this.jStartPanel.add(this.sssS);
 
-        this.times.add(new JLabel("Inizio"));
-        this.times.add(jStartPanel);
+        main.add(new JLabel("Inizio"));
+        main.add(jStartPanel);
 
         jEndPanel = new JPanel();
         jEndPanel.setLayout(new FlowLayout());
@@ -136,79 +125,95 @@ public class LayerEditAnello extends LayerPanel implements ItemListener  {
         sssE.setValue(anello.getEnd().getSss());
         this.jEndPanel.add(this.sssE);
 
-        this.times.add(new JLabel("Fine"));
-        this.times.add(jEndPanel);
+        main.add(new JLabel("Fine"));
+        main.add(jEndPanel);
 
-        this.data.add(times, BorderLayout.CENTER);
-        delete = new JButton("Elimina");
-        delete.addActionListener(this);
-        this.buttons.add(delete);
+        this.data.add(main);
 
+        this.ex.setText("Annulla");
+        this.ex.setActionCommand("Annulla");
+        this.ok.setActionCommand("Salva");
         this.ok.setText("Salva");
-        this.ok.addActionListener(this);
-        this.ko.setText("Annulla");
-        this.ko.addActionListener(this);
+        this.ok.setName("SalvaAnello");
+        this.ko.setText("Elimina");
 
     }
 
     @Override
     public void itemStateChanged(ItemEvent e) {
         JComboBox combo = (JComboBox) e.getSource();
-
-        if (combo.getName().equals("Personaggio")) {
-            pers = (Personaggio) e.getItem();
-        }
-        if (combo.getName().equals("Doppiatore")) {
-            dopp = (Doppiatore) e.getItem();
-        }
-
+        this.copp = (Coppia) combo.getSelectedItem();
     }
 
 
 
     public void actionPerformed(ActionEvent e) {
-        PopUpFilmDetails parent = (PopUpFilmDetails) this.getTopLevelAncestor();
-        boolean result = false;
+        JLayeredPane parent = (JLayeredPane) this.getParent();
+        String result = "";
 
-        if (e.getActionCommand().equals("Salva")) {
-            System.out.println(pers);
-            System.out.println(dopp);
-            if (this.pers != null && this.dopp != null) {
-                result = AnelloController.editAnelloCouple(anello, new Coppia(dopp, pers), film);
+        if (e.getActionCommand().equals("Salvaa")) {
+            if (this.copp != null) {
+                result = AnelloController.editAnelloCouple(anello, this.copp);
             }
-            if (result) {
-                new PopUpSuccess().setVisible(true);
-            } else {
-                new PopUpFail().setVisible(true);
-            }
-            this.pers = null;
-            this.dopp = null;
+
+            // Time
+
+
+            newEnd = new MyTime(hhE.getValue().toString() + ":" + mmE.getValue().toString() +
+                    ":" + ssE.getValue().toString() + "." + ssE.getValue().toString());
+
+            newStart = new MyTime(hhS.getValue().toString() + ":" + mmS.getValue().toString() +
+                    ":" + ssS.getValue().toString() + "." + ssS.getValue().toString());
+
+
+            // End time
+
+
+            result += AnelloController.editTime(anello, newStart,
+                    newEnd, film);
+
+
+
+
+
+
+
+
+
+            this.copp = null;
+
+            new PopUpSimple(result).setVisible(true);
+
+
+
             this.removeAll();
+            parent.setLayer(this, -1);
             parent.revalidate();
             parent.repaint();
+
         }
+
         else if (e.getActionCommand().equals("Annulla")) {
-            this.pers = null;
-            this.dopp = null;
+            this.copp = null;
             this.removeAll();
+            parent.setLayer(this, -1);
             parent.revalidate();
             parent.repaint();
 
         } else if (e.getActionCommand().equals("Elimina")) {
             result = AnelloController.deleteAnello(anello, film);
-            if (result) {
-                new PopUpSuccess().setVisible(true);
-            } else {
-                new PopUpFail().setVisible(true);
-            }
-            this.pers = null;
-            this.dopp = null;
+            this.copp = null;
             this.removeAll();
+            parent.setLayer(this, -1);
             parent.revalidate();
             parent.repaint();
+            new PopUpSimple(result).setVisible(true);
+
+
         }
     }
 
-    }
+
+}
 
 

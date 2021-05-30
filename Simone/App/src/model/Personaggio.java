@@ -4,6 +4,9 @@ public class Personaggio {
     private String name;
     private String id;
 
+    //vuoto
+    public Personaggio () {}
+
     public Personaggio (String name) {
         this.name=name;
     }
@@ -20,6 +23,10 @@ public class Personaggio {
 
     public void changeName(String name) {
         this.name = name;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getId() {

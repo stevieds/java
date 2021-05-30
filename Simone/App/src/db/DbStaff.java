@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
 
 public class DbStaff {
 
@@ -44,14 +45,15 @@ public class DbStaff {
         String lname = "'"+dopp.getLName()+"'";
         String recapito = "'"+dopp.getRecapito()+"'";
         String gender = "'"+dopp.getGenere().name()+"'";
-        String id = "'st"+ RandomStringUtils.random(9, true, true)+"'";
+        String id = "'"+dopp.getStaffId()+"'";
         String role = "'"+"voice"+"'";
         String sql = "INSERT INTO staff VALUES ("+
                 id.concat(", ").concat(fname).concat(", ").concat(lname).concat(", ").concat(recapito).concat(
                         ", ").concat(role).concat(", ").concat(gender).concat(")");
-        System.out.println(sql);
+
         sql_res=conn.queryToInsert(sql);
         conn.disconnect();
+        sql = "";
         if (sql_res != 0) {
             result = true;
         }
@@ -62,25 +64,65 @@ public class DbStaff {
 
 
 
-    public static ArrayList<Doppiatore> allVoices () throws SQLException {
+    public static Vector<Doppiatore> allVoices () {
         ResultSet rs;
-        ArrayList<Doppiatore> voices = new ArrayList<>();
+        Vector<Doppiatore> voices = new Vector<>();
         Conn conn = new Conn();
         conn.connect();
         String sql = "SELECT * FROM staff WHERE role LIKE 'voice';";
         rs = conn.queryToSelect(sql);
 
-        while (rs.next()) {
-            Doppiatore dopp = new Doppiatore(rs.getString("fname"), rs.getString(
-                    "lname"),
-                    rs.getString(
-                            "contact"), Genere.valueOf(rs.getString("gender")));
-            dopp.setStaffId(rs.getString("staffid"));
-            voices.add(dopp);
+
+            try {
+                while (rs.next()) {
+                    Doppiatore dopp = new Doppiatore(rs.getString("fname"), rs.getString(
+                            "lname"),
+                            rs.getString(
+                                    "contact"), Genere.valueOf(rs.getString("gender")));
+                    dopp.setStaffId(rs.getString("staffid"));
+                    voices.add(dopp);
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+        try {
+            rs.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-        rs.close();
         conn.disconnect();
         return voices;
+    }
+
+    public static Vector<Personale> allStaff (String type)  {
+        ResultSet rs;
+        Vector<Personale> staff = new Vector<>();
+        Conn conn = new Conn();
+        conn.connect();
+        String sql = "SELECT * FROM staff WHERE role LIKE '" + type + "';";
+        rs = conn.queryToSelect(sql);
+
+
+            try {
+                while (rs.next()) {
+                    Personale person = new Personale(rs.getString("fname"), rs.getString("lname"),
+                            rs.getString("contact"));
+                    person.setStaffId(rs.getString("staffid"));
+                    staff.add(person);
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+
+        try {
+            rs.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        conn.disconnect();
+        return staff;
     }
 
 }

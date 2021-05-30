@@ -8,10 +8,11 @@ public class Anello {
     private ArrayList<SubAnello> subAnelli;
     private Status status;
     private Coppia persDopp;
-
-
-
+    private int righe;
     private String anelloId;
+
+    //vuoto
+    public Anello () {}
 
 
 
@@ -20,6 +21,14 @@ public class Anello {
         this.start = start;
         this.end = end;
         this.status = Status.NEW;
+    }
+
+    // Costruttore con model.MyTime
+    public Anello(MyTime start, MyTime end, int righe) {
+        this.start = start;
+        this.end = end;
+        this.status = Status.NEW;
+        this.righe = righe;
     }
 
     // Costruttore con String
@@ -118,20 +127,27 @@ public class Anello {
         this.persDopp = persDopp;
     }
 
+    public Coppia getPersDopp() {
+        return persDopp;
+    }
+
+
+
+    public int getRighe() {
+        return righe;
+    }
+
+    public void setRighe(int righe) {
+        this.righe = righe;
+    }
+
     @Override
     public String toString() {
-        String compl="";
-        if (this.status==Status.Wip || this.status == Status.NEW) {
-            compl = "No";
-        } else if (this.status==Status.Done) {
-            compl = "Si";
-        }
         return
-                "Inizio: " + start + "\n" +
-                "Fine: " + end +  "\n" +
-                ", subAnelli: " + subAnelli + "\n"+
-                "Completato: " + compl +
-                "\n";
+                "Inizio: " + start + " " +
+                        " - " +
+                "Fine: " + end;
+
     }
 }
 

@@ -1,8 +1,14 @@
 package db;
 
+import model.Doppiatore;
+import model.Genere;
 import model.Personale;
 import model.Room;
 import org.apache.commons.lang.RandomStringUtils;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
 
 public class DbRoom {
 
@@ -24,5 +30,31 @@ public class DbRoom {
             result = true;
         }
         return result;
+    }
+
+    public static Vector<Room> allRooms()  {
+        Vector<Room> rooms = new Vector<>();
+        Conn conn = new Conn();
+        conn.connect();
+        String sql = "SELECT * FROM room;";
+        ResultSet rs = conn.queryToSelect(sql);
+
+
+            try {
+                while (rs.next()) {
+                    Room rm = new Room(rs.getString("roomname"));
+                    rooms.add(rm);
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+        try {
+            rs.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        conn.disconnect();
+        return rooms;
     }
 }

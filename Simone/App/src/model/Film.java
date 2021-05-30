@@ -14,6 +14,8 @@ public class Film implements Methods {
 
 
     //Costruttore
+    public Film () {}
+
     public Film(String oTitle, String iTitle, MyTime length) {
         this.oTitle = oTitle;
         this.iTitle = iTitle;
@@ -72,51 +74,7 @@ public class Film implements Methods {
         this.length.setMyTime(newLength);
     }
 
-    // Add anello with Obj
-    public void addAnello(Anello anello) {
-        if (this.lengthInMilli() >= (this.durataTotAnelli(this.anelli) + anello.lengthInMilli())) {
-            this.anelli.add(anello);
-            long difference = this.lengthInMilli() - this.durataTotAnelli(this.anelli);
-            MyTime n = MyTime.milliConvert(difference);
-            System.out.println("L'anello è stato aggiunto correttamente. La durata rimanente è di: " + n.toString());
-        } else {
-            long difference = (this.durataTotAnelli(this.anelli) + anello.lengthInMilli()) - this.lengthInMilli();
-            MyTime n = MyTime.milliConvert(difference);
-            System.out.println("Errore. L'anello eccede la durata totale del film di " + n.toString());
-        }
-    }
 
-    // Add model.Anello with model.MyTime
-    public void addAnello(MyTime start, MyTime end) {
-        if (this.lengthInMilli() >= (this.durataTotAnelli(this.anelli) + (end.milliSec() - start.milliSec()))) {
-            this.anelli.add(new Anello(start, end));
-            long difference = this.lengthInMilli() - this.durataTotAnelli(this.anelli);
-            MyTime n = MyTime.milliConvert(difference);
-            System.out.println("L'anello è stato aggiunto correttamente. La durata rimanente è di: " + n.toString());
-        } else {
-            long difference = ((this.durataTotAnelli(this.anelli) + (end.milliSec() - start.milliSec()) - this.lengthInMilli()));
-            MyTime n = MyTime.milliConvert(difference);
-            System.out.println("Errore. L'anello eccede la durata totale del film di " + n.toString());
-        }
-    }
-
-
-    // Add model.Anello with Strings
-    public void addAnello(String start, String end) {
-        MyTime s = new MyTime(start);
-        MyTime e = new MyTime(end);
-
-        if (this.lengthInMilli() >= (this.durataTotAnelli(this.anelli) + (e.milliSec() - s.milliSec()))) {
-            this.anelli.add(new Anello(start, end));
-            long difference = this.lengthInMilli() - this.durataTotAnelli(this.anelli);
-            MyTime n = MyTime.milliConvert(difference);
-            System.out.println("L'anello è stato aggiunto correttamente. La durata rimanente è di: " + n.toString());
-        } else {
-            long difference = ((this.durataTotAnelli(this.anelli) + (e.milliSec() - s.milliSec()) - this.lengthInMilli()));
-            MyTime n = MyTime.milliConvert(difference);
-            System.out.println("Errore. L'anello eccede la durata totale del film di " + n.toString());
-        }
-    }
 
 
     // Retrieve list of abbinamenti
@@ -150,19 +108,7 @@ public class Film implements Methods {
         persDopp.add(coppia);
     }
 
-    public boolean checkPersonaggio(String nomePers) {
-        Personaggio pers = new Personaggio(nomePers);
-        boolean ret = false;
-        for (Coppia coppia : this.persDopp) {
-            if (coppia.getPers().getName().equals(nomePers)) {
-                ret = true;
-                break;
-            } else if (!coppia.getPers().equals(nomePers)) {
-                ret = false;
-            }
-        }
-        return ret;
-    }
+
 
     // Add doppiatore to personaggio
     public void setDoppiatore(Doppiatore dopp, Personaggio pers) {
@@ -205,9 +151,9 @@ public class Film implements Methods {
         String answer = "";
         if (this.status == Status.NEW) {
             answer = "model.Film da doppiare";
-        } else if (this.status == Status.Wip) {
+        } else if (this.status == Status.WIP) {
             answer = "Il film è in lavorazione";
-        } else if (this.status == Status.Done) {
+        } else if (this.status == Status.DONE) {
             answer = "Il doppiaggio del film è stato terminato";
         }
         return answer;
@@ -254,12 +200,7 @@ public class Film implements Methods {
     @Override
     public String toString() {
         return
-                "Titolo italiano: " + iTitle + '\n' +
-                        "Titolo originale: '" + oTitle + '\n' +
-                        "Durata: " + length + '\n' +
-                        "Anelli: " + anelli + '\n' +
-                        "Abbinamenti: " + persDopp + '\n' +
-                        "Stato: " + this.checkCompleted();
+                this.oTitle;
     }
 }
 

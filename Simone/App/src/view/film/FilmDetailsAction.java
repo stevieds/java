@@ -23,8 +23,7 @@ public class FilmDetailsAction extends AbstractAction {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        PopUpFilmDetails dialog = new PopUpFilmDetails(this.film);
-        dialog.setVisible(true);
+        new PopUpFilmDetails(this.film).setVisible(true);
     }
 
     @Override

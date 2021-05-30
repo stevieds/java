@@ -1,11 +1,9 @@
 package view.film;
 
-import db.DbFilm;
-import model.Film;
+import Controller.FilmController;
 import model.MyTime;
 import view.PopUp;
-import view.PopUpFail;
-import view.PopUpSuccess;
+import view.PopUpSimple;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,17 +26,36 @@ public class PopUpNewFilm extends PopUp {
 
     public PopUpNewFilm () {
         this.setTitle("Aggiungi film");
-        this.data.setLayout(new GridLayout(4, 2));
+        this.setSize(411, 350);
+
+
+
+
+
+        this.data.setLayout(new FlowLayout());
+
+        this.centre = new JPanel(new FlowLayout());
+        this.descr.setText("Aggiungi un nuovo film");
+        descr.setFont(peignotBig);
+        descr.setHorizontalAlignment(SwingConstants.CENTER);
+        this.top.add(descr);
+
+
+        this.centreContent = new JPanel(new GridLayout(6, 1));
+
+
+
+
         lITitle = new JLabel("Titolo italiano");
-        this.data.add(this.lITitle);
+        this.centreContent.add(this.lITitle);
         jITitle = new JTextField();
-        this.data.add(jITitle);
+        this.centreContent.add(jITitle);
         lOTitle = new JLabel("Titolo originale");
-        this.data.add(this.lOTitle);
+        this.centreContent.add(this.lOTitle);
         jOTitle = new JTextField();
-        this.data.add(jOTitle);
+        this.centreContent.add(jOTitle);
         lLength = new JLabel("Durata");
-        this.data.add(lLength);
+        this.centreContent.add(lLength);
         jLength = new JPanel();
         jLength.setLayout(new FlowLayout());
 
@@ -54,15 +71,37 @@ public class PopUpNewFilm extends PopUp {
 
 
 
-        this.data.add(jLength);
+        this.centreContent.add(jLength);
+        this.centre.add(centreContent);
+        this.add(centre, BorderLayout.CENTER);
 
         this.ok.setText("Invia");
+        this.ex.setText("Annulla");
         this.ko.setText("Reset");
+
+
+        this.buttons.add(this.ex);
+
+
+        this.ok.setPreferredSize(new Dimension(75, 30));
+        this.ok.setBackground(buttonGr);
+        this.ok.setForeground(lightGray);
+        this.ok.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        this.ko.setPreferredSize(new Dimension(75, 30));
+        this.ko.setBackground(darkGray);
+        this.ko.setForeground(lightGray);
+        this.ko.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        this.ex.setPreferredSize(new Dimension(75, 30));
+        this.ex.setBackground(buttonRed);
+        this.ex.setForeground(lightGray);
+        this.ex.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        boolean result;
+        String result;
         String command = e.getActionCommand();
         if (command.equals("Invia")) {
             String iTitle = this.jITitle.getText();
@@ -73,21 +112,15 @@ public class PopUpNewFilm extends PopUp {
                             this.ss.getValue().toString() + "." +
                             this.sss.getValue().toString()
             );
-            Film film = new Film(oTitle, iTitle, length);
-            result = DbFilm.insert(film);
-            if (result) {
-                PopUpSuccess popUpSuccess = new PopUpSuccess();
-                popUpSuccess.setVisible(true);
+            result = FilmController.newFilm(oTitle, iTitle, length);
+            new PopUpSimple(result).setVisible(true);
                 this.jITitle.setText("");
                 this.jOTitle.setText("");
                 this.hh.setValue(0);
                 this.mm.setValue(0);
                 this.ss.setValue(0);
                 this.sss.setValue(0);
-            } else if (!result) {
-                PopUpFail popUpFail = new PopUpFail();
-                popUpFail.setVisible(true);
-            }
+
         }
         else if (command.equals("Reset")) {
             this.jITitle.setText("");
@@ -97,6 +130,9 @@ public class PopUpNewFilm extends PopUp {
             this.ss.setValue(0);
             this.sss.setValue(0);
 
+        }
+        else if (command.equals("Annulla")) {
+            this.dispose();
         }
     }
 

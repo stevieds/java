@@ -22,9 +22,10 @@ public class DbAnello {
         String filmId = "'"+film.getFilmId()+"'";
         String status = "'"+anello.getStatus().toLowerCase()+"'";
         String id = "'an"+ RandomStringUtils.random(9, true, true)+"'";
+        String rows = String.valueOf(anello.getRighe());
 
         String sql = "INSERT INTO anello VALUES ("+
-                id.concat(", ").concat(start).concat(", ").concat(end).concat(", ").concat(filmId).concat(
+                id.concat(", ").concat(start).concat(", ").concat(end).concat(", ").concat(rows).concat(", ").concat(filmId).concat(
                         ", ").concat(status).concat(")");
 
         sql_res=conn.queryToInsert(sql);
@@ -37,7 +38,7 @@ public class DbAnello {
 
 
 
-    public static ArrayList<Pair> selectAnelli () throws SQLException {
+    public static ArrayList<Pair> selectAnelli ()  {
         ArrayList<Pair> anelli = new ArrayList<>();
         Conn conn = new Conn();
         conn.connect();
@@ -47,15 +48,27 @@ public class DbAnello {
 
         rs = conn.queryToSelect(sql);
 
-        while (rs.next()) {
-            Anello anello = new Anello(rs.getString("start"), rs.getString("end"),
-                    Status.valueOf(rs.getString(
-                    "status").toUpperCase()));
-            anello.setAnelloId(rs.getString("aid"));
 
-            anelli.add(new Pair (rs.getString("filmid"), anello));
-        }
+            try {
+                while (rs.next()) {
+                    Anello anello = new Anello(rs.getString("start"), rs.getString("end"),
+                            Status.valueOf(rs.getString(
+                                    "status").toUpperCase()));
+                    anello.setRighe(rs.getInt("rows"));
+                    anello.setAnelloId(rs.getString("aid"));
+
+                    if (rs.getString("coupleid") != null) {
+                        anello.addCouple(new Coppia(rs.getString("coupleid")));
+                    }
+
+                    anelli.add(new Pair (rs.getString("filmid"), anello));
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
         conn.disconnect();
+        sql = "";
         return anelli;
     }
 
@@ -71,6 +84,7 @@ public class DbAnello {
         String sql =
                 "UPDATE anello_couple SET coupleid =" + coupleId + "WHERE aid =" + aId +
                         ";";
+        System.out.println(sql);
         int sql_res=conn.queryToInsert(sql);
         conn.disconnect();
         if (sql_res != 0) {
@@ -125,8 +139,8 @@ public class DbAnello {
         String sql = "INSERT INTO anello_couple VALUES(" +
                 aId + ", " + coupleId + ");";
 
-        System.out.println(sql);
         int sql_res=conn.queryToInsert(sql);
+        System.out.println(sql);
         conn.disconnect();
 
         if (sql_res != 0) {
@@ -175,6 +189,77 @@ public class DbAnello {
     }
 
  */
+
+
+    public static boolean editAnelloTime (Anello anello, MyTime start, MyTime end) {
+        Conn conn = new Conn();
+        conn.connect();
+        boolean result = false;
+
+        String aId = "'" + anello.getAnelloId() + "'";
+
+
+
+        String sql =
+                "UPDATE anello SET start = " + "'" + start.toString() + "'" + ", end = " + "'" + end.toString() + "'" +
+                        " WHERE aid " +
+                        "=" + aId +
+                        ";";
+        System.out.println(sql);
+        int sql_res=conn.queryToInsert(sql);
+        conn.disconnect();
+        if (sql_res != 0) {
+            result = true;
+        }
+        return result;
+    }
+
+
+
+
+
+    public static boolean singleEditAnello (Anello anello, String param, String name) {
+        Conn conn = new Conn();
+        conn.connect();
+        boolean result = false;
+
+        String aId = "'" + anello.getAnelloId() + "'";
+
+        String sql =
+                "UPDATE anello SET " + name + " = " + "'" + param + "'" + " " +
+                        " WHERE aid " +
+                        "=" + aId +
+                        ";";
+        System.out.println(sql);
+        int sql_res=conn.queryToInsert(sql);
+        conn.disconnect();
+        if (sql_res != 0) {
+            result = true;
+        }
+        return result;
+    }
+
+
+
+    public static boolean multiEditAnello (String value2, String param2, String param,
+                                           String name) {
+        Conn conn = new Conn();
+        conn.connect();
+        boolean result = false;
+
+        String sql =
+                "UPDATE anello SET " + name + " = " + "'" + param + "'" + " " +
+                        " WHERE " + param2 +
+                        " LIKE " + value2 +
+                        ";";
+        System.out.println(sql);
+        int sql_res=conn.queryToInsert(sql);
+        conn.disconnect();
+        if (sql_res != 0) {
+            result = true;
+        }
+        return result;
+    }
 
 
 

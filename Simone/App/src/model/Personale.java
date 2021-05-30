@@ -9,6 +9,9 @@ public class Personale {
 
     private String staffId;
 
+    //vuoto
+    public Personale () {}
+
     public Personale(String fname, String lname, String recapito) {
         this.fname=fname;
         this.lname=lname;
@@ -49,6 +52,10 @@ public class Personale {
 
     public void setStaffId(String staffId) {
         this.staffId = staffId;
+    }
+
+    public Boolean compareTo (Personale p) {
+        return this.staffId.equals(p.getStaffId());
     }
 }
 

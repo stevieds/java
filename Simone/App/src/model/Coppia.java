@@ -5,6 +5,9 @@ public class Coppia {
     private Personaggio pers;
     private String coupleId;
 
+    // Costruttore vuoto
+    public Coppia () {}
+
     public Coppia (Personaggio pers, String coupleId) {
         this.pers=pers;
         this.coupleId=coupleId;
@@ -23,6 +26,12 @@ public class Coppia {
     public Coppia (Doppiatore dopp, Personaggio pers, String coupleId) {
         this.dopp=dopp;
         this.pers=pers;
+        this.coupleId=coupleId;
+    }
+
+    public Coppia (String coupleId) {
+        this.dopp=null;
+        this.pers=null;
         this.coupleId=coupleId;
     }
 
@@ -72,6 +81,19 @@ public class Coppia {
 
     @Override
     public String toString() {
-        return this.pers.toString();
+        if (this.dopp == null) {
+            return this.pers.toString();
+        } else {
+            return
+                    this.pers.toString() + " - " +
+
+                            this.dopp.getFullName();
+
+        }
+
     }
+
+
+
+
 }

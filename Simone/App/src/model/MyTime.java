@@ -21,6 +21,17 @@ public class MyTime {
         }
     }
 
+    // Constructor Test
+    public MyTime (Integer dateInt, SimpleDateFormat sdf) {
+        try
+        {
+            this.date = sdf.parse(String.valueOf(dateInt));
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setMyTime (String newTime) {
         try
         {
@@ -57,11 +68,19 @@ public class MyTime {
         return Integer.parseInt(new SimpleDateFormat("SSS").format(date));
     }
 
+    public Date getDate() {
+        return date;
+    }
 
     @Override
     public String toString() {
             String dateStr = sdf.format(date);
             return dateStr;
+    }
+
+    public int toInt() {
+        String dateStr = sdf.format(date);
+        return Integer.parseInt(dateStr);
     }
 
 

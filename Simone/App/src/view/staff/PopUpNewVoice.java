@@ -4,16 +4,15 @@ import Controller.StaffController;
 import db.DbStaff;
 import model.Doppiatore;
 import model.Genere;
-import view.PopUp;
-import view.PopUpFail;
-import view.PopUpSuccess;
+import view.*;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class PopUpNewVoice extends PopUp implements ActionListener {
+public class PopUpNewVoice extends PopUp implements ActionListener, GraphicsElements {
     JTextField jFname;
     JTextField jLname;
     JTextField jContact;
@@ -22,6 +21,7 @@ public class PopUpNewVoice extends PopUp implements ActionListener {
     JLabel lLname;
     JLabel lContact;
     JLabel lGender;
+
     private final String[] G = {"","M", "F"};
 
 
@@ -29,36 +29,81 @@ public class PopUpNewVoice extends PopUp implements ActionListener {
 
     public PopUpNewVoice() {
         super();
+        this.setSize(411, 350);
         this.setTitle("Aggiungi nuova voce");
 
 
 
-        this.data.setLayout(new GridLayout(4, 2));
 
-        this.jFname = new JTextField(50);
-        this.data.add(this.jFname);
+
+
+
+
+
+
+
+
+
+
+
+
+        this.data.setLayout(new FlowLayout());
+
+
+        this.descr.setText("Aggiungi un nuovo doppiatore");
+        descr.setFont(peignotBig);
+        descr.setHorizontalAlignment(SwingConstants.CENTER);
+        this.top.add(descr);
+
+        this.centreContent.setLayout(new GridLayout(8, 1));
+
+
+        this.centreContent.setPreferredSize(new Dimension(256, 188));
+
         this.lFname = new JLabel("Nome");
-        this.data.add(this.lFname);
+        this.centreContent.add(this.lFname);
+        this.jFname = new JTextField(25);
+        this.jFname.setBounds(0, 0, 30, 5);
+        this.centreContent.add(this.jFname);
 
-        this.jLname = new JTextField(50);
-        this.data.add(this.jLname);
         this.lLname = new JLabel("Cognome");
-        this.data.add(this.lLname);
+        this.centreContent.add(this.lLname);
+        this.jLname = new JTextField(50);
+        this.centreContent.add(this.jLname);
 
-        this.jContact = new JTextField(50);
-        this.data.add(this.jContact);
         this.lContact = new JLabel("Recapito");
-        this.data.add(this.lContact);
+        this.centreContent.add(this.lContact);
+        this.jContact = new JTextField(50);
+        this.centreContent.add(this.jContact);
+
+        this.lGender = new JLabel("Genere");
+        this.centreContent.add(this.lGender);
 
         this.jGender = new JComboBox(this.G);
-        this.data.add(this.jGender);
-        this.lGender = new JLabel("Genere");
-        this.data.add(this.lGender);
+        this.jGender.setUI(new BasicComboBoxUI());
+        this.jGender.setBackground(Color.WHITE);
+
+
+        this.centreContent.add(this.jGender);
+
+        this.centre.add(centreContent);
+        this.add(centre, BorderLayout.CENTER);
+
+
+
 
 
 
         this.ok.setText("Invia");
+        this.ex.setText("Annulla");
         this.ko.setText("Reset");
+
+
+        this.buttons.add(this.ex);
+
+
+
+
 
 
     }
@@ -73,20 +118,18 @@ public class PopUpNewVoice extends PopUp implements ActionListener {
             String contact = this.jContact.getText();
             String gender = (String)this.jGender.getSelectedItem();
 
-            Doppiatore dopp = new Doppiatore(fname, lname, contact, Genere.valueOf(gender));
 
-            result = StaffController.insertVoice(dopp);
+
+            result = StaffController.insertVoice(fname, lname, contact, Genere.valueOf(gender));
 
             if (result) {
-                PopUpSuccess popUpSuccess = new PopUpSuccess();
-                popUpSuccess.setVisible(true);
+                new PopUpSimple("Oeperazione eseguita correttamente").setVisible(true);
                 this.jFname.setText("");
                 this.jLname.setText("");
                 this.jContact.setText("");
                 this.jGender.setSelectedItem(null);
             } else if (!result) {
-                PopUpFail popUpFail = new PopUpFail();
-                popUpFail.setVisible(true);
+                new PopUpSimple("Attenzione! \n Si è verificato un errore").setVisible(true);
             }
         }
         else if (command.equals("Reset")) {
@@ -95,6 +138,10 @@ public class PopUpNewVoice extends PopUp implements ActionListener {
             this.jContact.setText("");
             this.jGender.setSelectedItem(null);
 
+        }
+
+        else if (command.equals("Annulla")) {
+            this.dispose();
         }
     }
 }

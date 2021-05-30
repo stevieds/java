@@ -37,20 +37,28 @@ public class DbFilm {
         return result;
     }
 
-    public static ArrayList<Film> allFilm () throws SQLException {
+    public static ArrayList<Film> allFilm () {
         ArrayList<Film> films = new ArrayList<>();
         Conn conn = new Conn();
         conn.connect();
         String sql = "SELECT * FROM film;";
         ResultSet rs = conn.queryToSelect(sql);
-        while (rs.next()) {
-            Film film = new Film(rs.getString("ititle"), rs.getString(
-                    "otitle"), new MyTime(rs.getString("length")),
-                    Status.valueOf(rs.getString("status").toUpperCase()));
-            film.setFilmId(rs.getString("filmid"));
-            films.add(film);
-        }
+
+            try {
+                while (rs.next()) {
+                    Film film = new Film(rs.getString("otitle"), rs.getString(
+                            "ititle"), new MyTime(rs.getString("length")),
+                            Status.valueOf(rs.getString("status").toUpperCase()));
+                    film.setFilmId(rs.getString("filmid"));
+                    films.add(film);
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+
         conn.disconnect();
+        sql = "";
         return films;
     }
 }
